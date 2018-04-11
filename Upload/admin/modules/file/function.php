@@ -1,7 +1,7 @@
 <?php
 function get_file_extension($ext)
 {
-	switch ($ext) {
+    switch ($ext) {
         case 'avi':
             return 'avi';
         case 'css':
@@ -60,9 +60,9 @@ function get_file_extension($ext)
             return 'zip';
         case 'ico': case 'gif': case 'jpg': case 'jpeg': case 'png': case 'bmp':
             return 'image';
-		default:
-			return "other";
-	}
+        default:
+            return "other";
+    }
 }
 
 function get_file_icon($file)
@@ -84,41 +84,41 @@ function get_file_icon($file)
 
 function is_editable($file)
 {
-	$ext = pathinfo($file);
-	$ext = $ext['extension'];
-	if (in_array($ext, array("php", "html", "htm", "xml", "htaccess", "js", "css", "txt", ""))) {
-		return true;
-		exit;
-	}
+    $ext = pathinfo($file);
+    $ext = $ext['extension'];
+    if (in_array($ext, array("php", "html", "htm", "xml", "htaccess", "js", "css", "txt", ""))) {
+        return true;
+        exit;
+    }
 
-	return false;
+    return false;
 }
 
 function get_codemirror_type($ext)
 {
-	switch ($ext) {
-		case "php":
-			return "application/x-httpd-php";
-		case "css":
-			return "text/css";
-		case "js":
-			return "text/javascript";
-		default:
-			return "text/html";
-	}
+    switch ($ext) {
+        case "php":
+            return "application/x-httpd-php";
+        case "css":
+            return "text/css";
+        case "js":
+            return "text/javascript";
+        default:
+            return "text/html";
+    }
 }
 
 function removedir($directory)
 {
-	foreach (@scandir($directory) as $f) {
-		if (in_array($f, array(".", ".."))) continue;
-		if (is_dir($directory.'/'.$f)) {
-			@removedir($directory.'/'.$f);
-		} else {
-			@unlink($directory.'/'.$f);
-		}
-	}
-	return rmdir($directory);
+    foreach (@scandir($directory) as $f) {
+        if (in_array($f, array(".", ".."))) continue;
+        if (is_dir($directory.'/'.$f)) {
+            @removedir($directory.'/'.$f);
+        } else {
+            @unlink($directory.'/'.$f);
+        }
+    }
+    return rmdir($directory);
 }
 
 function file_list_destination($files)
@@ -194,7 +194,7 @@ function get_folders($dir='')
         $folders['/'] = '/';
     }
     
-	foreach($open as $file){
+    foreach($open as $file){
         if(in_array($file->getfilename(), array(".", ".."))) continue;
         
         if($file->isDir()){

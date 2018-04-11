@@ -71,49 +71,49 @@ if (FILEMANAGER_PASSWORD && (!isset($admin_session['data']['filemanager']) || em
 
 $dir = $dir_query = '';
 if(isset($mybb->input['directory']) && !empty($mybb->input['directory'])) {
-	$page->add_breadcrumb_item($lang->file_nav_root, "index.php?module=file");
-	$dir = htmlspecialchars_uni(str_replace(array("\\", "//"), "/", $mybb->input['directory']));
+    $page->add_breadcrumb_item($lang->file_nav_root, "index.php?module=file");
+    $dir = htmlspecialchars_uni(str_replace(array("\\", "//"), "/", $mybb->input['directory']));
     $dir = ltrim($dir, './');
     if (!empty($dir)) {
         $dir_query = '&directory='.$dir;
     }
-	$list_dir = explode("/", $dir);
-	foreach($list_dir as $d){
-		if($d == "") continue;
-		$path = substr($dir, 0, strrpos($dir, $d) + strlen($d));
-		$page->add_breadcrumb_item($d, "index.php?module=file&amp;directory=$path");
-	}
+    $list_dir = explode("/", $dir);
+    foreach($list_dir as $d){
+        if($d == "") continue;
+        $path = substr($dir, 0, strrpos($dir, $d) + strlen($d));
+        $page->add_breadcrumb_item($d, "index.php?module=file&amp;directory=$path");
+    }
 } else {
-	$page->add_breadcrumb_item($lang->file_nav_root, "index.php?module=file");
+    $page->add_breadcrumb_item($lang->file_nav_root, "index.php?module=file");
 }
 
 if($mybb->input['file'] && !empty($mybb->input['file'])){
-	$file = htmlspecialchars_uni($mybb->input['file']);
-	if(!empty($dir))
-		$file_path = MYBB_ROOT.$dir."/".$file;
-	else
-		$file_path = MYBB_ROOT.$file;
+    $file = htmlspecialchars_uni($mybb->input['file']);
+    if(!empty($dir))
+        $file_path = MYBB_ROOT.$dir."/".$file;
+    else
+        $file_path = MYBB_ROOT.$file;
 }
 
 $sub_tabs['file_manager'] = array(
-	'title' => $lang->file_sub_name,
-	'link' => 'index.php?module=file'.$dir_query,
-	'description' => $lang->file_sub_name_desc
+    'title' => $lang->file_sub_name,
+    'link' => 'index.php?module=file'.$dir_query,
+    'description' => $lang->file_sub_name_desc
 );
 $sub_tabs['new_folder'] = array(
-	'title' => $lang->file_sub_ndir,
-	'link' => 'index.php?module=file&action=new_folder'.$dir_query,
-	'description' => $lang->file_sub_ndir_desc
+    'title' => $lang->file_sub_ndir,
+    'link' => 'index.php?module=file&action=new_folder'.$dir_query,
+    'description' => $lang->file_sub_ndir_desc
 );
 $sub_tabs['new_file'] = array(
-	'title' => $lang->file_sub_nfile,
-	'link' => 'index.php?module=file&action=new_file'.$dir_query,
-	'description' => $lang->file_sub_nfile_desc
+    'title' => $lang->file_sub_nfile,
+    'link' => 'index.php?module=file&action=new_file'.$dir_query,
+    'description' => $lang->file_sub_nfile_desc
 );
 $sub_tabs['upload'] = array(
-	'title' => $lang->file_sub_upload,
-	'link' => 'index.php?module=file&action=upload'.$dir_query,
-	'description' => $lang->file_sub_upload_desc
+    'title' => $lang->file_sub_upload,
+    'link' => 'index.php?module=file&action=upload'.$dir_query,
+    'description' => $lang->file_sub_upload_desc
 );
 
 if (isset($mybb->input['inline_actions']) && $mybb->request_method == 'post') {
@@ -457,7 +457,7 @@ $(document).ready(function() {
 EOT;
     
     $page->output_header();
-	$page->output_nav_tabs($sub_tabs, 'upload');
+    $page->output_nav_tabs($sub_tabs, 'upload');
     
     $form = new Form('index.php?module=file&action=upload'.$dir_query, "post", "upload_files", true);
     $form_container = new FormContainer($lang->file_upload_title, 'file__upload tfixed');
@@ -490,29 +490,29 @@ EOT;
 elseif($mybb->input['action'] == "edit") {
     if(isset($file) && !empty($file)) {
         if(file_exists($file_path) && !is_dir($file_path)){
-			if(is_editable($file)) {
-				if($mybb->request_method == "post"){
-					if($mybb->input['close']){
-						admin_redirect('index.php?module=file'.$dir_query);
-					} else {
-						$content = trim($mybb->input['file_content']);
+            if(is_editable($file)) {
+                if($mybb->request_method == "post"){
+                    if($mybb->input['close']){
+                        admin_redirect('index.php?module=file'.$dir_query);
+                    } else {
+                        $content = trim($mybb->input['file_content']);
 
-						$fhandle = fopen($file_path, "w");
-						fwrite($fhandle, $content);
-						fclose($fhandle);
+                        $fhandle = fopen($file_path, "w");
+                        fwrite($fhandle, $content);
+                        fclose($fhandle);
 
-						flash_message($lang->file_success_edit, "success");
-						admin_redirect('index.php?module=file'.$dir_query);
-					}
-				}
-				$path_parts = pathinfo($file);
-				$content = file_get_contents($file_path);
-				
-				$lang->file_nav_edit = $lang->sprintf($lang->file_nav_edit, $file);
-				$page->add_breadcrumb_item($lang->file_nav_edit, 'index.php?module=file&action=edit'.$dir_query.'file='.$file);
+                        flash_message($lang->file_success_edit, "success");
+                        admin_redirect('index.php?module=file'.$dir_query);
+                    }
+                }
+                $path_parts = pathinfo($file);
+                $content = file_get_contents($file_path);
+                
+                $lang->file_nav_edit = $lang->sprintf($lang->file_nav_edit, $file);
+                $page->add_breadcrumb_item($lang->file_nav_edit, 'index.php?module=file&action=edit'.$dir_query.'file='.$file);
 
-				if($admin_options['codepress'] != 0){
-					$page->extra_header .= '
+                if($admin_options['codepress'] != 0){
+                    $page->extra_header .= '
 <link href="./jscripts/codemirror/lib/codemirror.css" rel="stylesheet">
 <link href="./jscripts/codemirror/theme/mybb.css?ver=1804" rel="stylesheet">
 <script src="./jscripts/codemirror/lib/codemirror.js"></script>
@@ -534,59 +534,59 @@ elseif($mybb->input['action'] == "edit") {
 var code = 1;
 $(document).ready(function() {
     var inputs = $(".file__submit");
-	$("input[name=\'continue\']").click(function(event) {
-		event.preventDefault();
-		if(code == 1)
+    $("input[name=\'continue\']").click(function(event) {
+        event.preventDefault();
+        if(code == 1)
             content = editor.getValue();
         else
             content = document.getElementById("file_content").value;
         
         var formData = {
-			\'my_post_key\' : $(\'input[name="my_post_key"]\').val(),
-			\'file_content\' : content
-		}
+            \'my_post_key\' : $(\'input[name="my_post_key"]\').val(),
+            \'file_content\' : content
+        }
         
         inputs.prop("disabled", true);
-		$.ajax({
-			url: "./modules/file/quick_save.php?directory='.$dir.'&file='.$file.'",
-			type: "post",
-			dataType: "json",
-			data: formData,
-			success: function(data) {
+        $.ajax({
+            url: "./modules/file/quick_save.php?directory='.$dir.'&file='.$file.'",
+            type: "post",
+            dataType: "json",
+            data: formData,
+            success: function(data) {
                 $.jGrowl(data.msg);
                 inputs.prop("disabled", false);
-			},
-			error: function(data){
-				$.jGrowl("'.$lang->file_error_edit.'");
+            },
+            error: function(data){
+                $.jGrowl("'.$lang->file_error_edit.'");
                 inputs.prop("disabled", false);
-				console.log(data);
-			}
-		});
-	});
+                console.log(data);
+            }
+        });
+    });
 });
 </script>
 ';
-				}
+                }
 
                 $fm_title = $lang->file_edit_text_editor.' - '.$fm_title;
-				$page->output_header();
+                $page->output_header();
 
-				$form = new Form('index.php?module=file&amp;action=edit'.$dir_query.'&file='.$file, "post", "edit_file");
-				
-				$lang->file_edit_title = $lang->sprintf($lang->file_edit_title, $dir, $file);
-				$form_container = new FormContainer($lang->file_edit_title, 'tfixed');
+                $form = new Form('index.php?module=file&amp;action=edit'.$dir_query.'&file='.$file, "post", "edit_file");
+                
+                $lang->file_edit_title = $lang->sprintf($lang->file_edit_title, $dir, $file);
+                $form_container = new FormContainer($lang->file_edit_title, 'tfixed');
 
-				$form_container->output_row("", "", $form->generate_text_area("file_content", $content, array('id' => 'file_content', 'style' => 'width: 100%; height: 500px;')));
-				$form_container->end();
+                $form_container->output_row("", "", $form->generate_text_area("file_content", $content, array('id' => 'file_content', 'style' => 'width: 100%; height: 500px;')));
+                $form_container->end();
 
-				$buttons[] = '<input class="submit_button file__submit" type="button" name="continue" value="'.$lang->file_button_quick_save.'" />';
-				$buttons[] = $form->generate_submit_button($lang->file_button_save, array('name' => 'save', 'class' => 'file__submit'));
-				$buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close', 'class' => 'file__submit'));
+                $buttons[] = '<input class="submit_button file__submit" type="button" name="continue" value="'.$lang->file_button_quick_save.'" />';
+                $buttons[] = $form->generate_submit_button($lang->file_button_save, array('name' => 'save', 'class' => 'file__submit'));
+                $buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close', 'class' => 'file__submit'));
                 $buttons[] = '<input class="submit_button file__editor" type="button" name="editorType" value="'.$lang->file_button_text.'" />';
 
-				$form->output_submit_wrapper($buttons);
+                $form->output_submit_wrapper($buttons);
 
-				$form->end();
+                $form->end();
 
                 echo '<script type"text/javascript">
                     var editor = CodeMirror.fromTextArea(document.getElementById("file_content"), {
@@ -624,62 +624,62 @@ $(document).ready(function() {
                     });
                 </script>';
 
-				$page->output_footer();
-			} else {
-				flash_message($lang->file_error_edit_type, "error");
-				admin_redirect('index.php?module=file'.$dir_query);
-			}
+                $page->output_footer();
+            } else {
+                flash_message($lang->file_error_edit_type, "error");
+                admin_redirect('index.php?module=file'.$dir_query);
+            }
         } else {
-			flash_message($lang->file_error_exists, "error");
-			admin_redirect('index.php?module=file');
+            flash_message($lang->file_error_exists, "error");
+            admin_redirect('index.php?module=file');
         }
     } else {
-		flash_message($lang->file_error_edit_file, "error");
-		admin_redirect('index.php?module=file');
+        flash_message($lang->file_error_edit_file, "error");
+        admin_redirect('index.php?module=file');
     }
 }
 elseif($mybb->input['action'] == "delete") {
-	if(isset($file) && !empty($file)) {
-		if(file_exists($file_path) && !is_dir($file_path)) {
-			if($mybb->request_method == "post") {
-				if($mybb->input['delete']) {
-					if(unlink($file_path)) {
-						flash_message($lang->file_success_delete_file, "success");
-						admin_redirect('index.php?module=file'.$dir_query);
-					} else {
-						flash_message($lang->file_error_delete, "error");
-						admin_redirect('index.php?module=file&action=delete'.$dir_query.'&file='.$file);
-					}
-				} else {
-					admin_redirect('index.php?module=file'.$dir_query);
-				}
-			}
-			$lang->file_nav_delete_file = $lang->sprintf($lang->file_nav_delete_file, $file);
-			$page->add_breadcrumb_item($lang->file_nav_delete_file, 'index.php?module=file&action=delete'.$dir_query.'&file='.$file);
-			$page->output_header();
+    if(isset($file) && !empty($file)) {
+        if(file_exists($file_path) && !is_dir($file_path)) {
+            if($mybb->request_method == "post") {
+                if($mybb->input['delete']) {
+                    if(unlink($file_path)) {
+                        flash_message($lang->file_success_delete_file, "success");
+                        admin_redirect('index.php?module=file'.$dir_query);
+                    } else {
+                        flash_message($lang->file_error_delete, "error");
+                        admin_redirect('index.php?module=file&action=delete'.$dir_query.'&file='.$file);
+                    }
+                } else {
+                    admin_redirect('index.php?module=file'.$dir_query);
+                }
+            }
+            $lang->file_nav_delete_file = $lang->sprintf($lang->file_nav_delete_file, $file);
+            $page->add_breadcrumb_item($lang->file_nav_delete_file, 'index.php?module=file&action=delete'.$dir_query.'&file='.$file);
+            $page->output_header();
 
-			$form = new Form('index.php?module=file&action=delete'.$dir_query.'&file='.$file, "post", "delete_file");
-			
-			$lang->file_delete_file_title = $lang->sprintf($lang->file_delete_file_title, $dir, $file);
-			$form_container = new FormContainer($lang->file_delete_file_title, 'tfixed');
+            $form = new Form('index.php?module=file&action=delete'.$dir_query.'&file='.$file, "post", "delete_file");
+            
+            $lang->file_delete_file_title = $lang->sprintf($lang->file_delete_file_title, $dir, $file);
+            $form_container = new FormContainer($lang->file_delete_file_title, 'tfixed');
 
-			$form_container->output_row($lang->file_delete_file_desc, $lang->file_delete_warn);
-			$form_container->end();
+            $form_container->output_row($lang->file_delete_file_desc, $lang->file_delete_warn);
+            $form_container->end();
 
-			$buttons[] = $form->generate_submit_button($lang->file_button_delete, array('name' => 'delete'));
-			$buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
+            $buttons[] = $form->generate_submit_button($lang->file_button_delete, array('name' => 'delete'));
+            $buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
 
-			$form->output_submit_wrapper($buttons);
+            $form->output_submit_wrapper($buttons);
 
-			$form->end();
+            $form->end();
 
-			$page->output_footer();
-		} else {
-			flash_message($lang->file_error_exists, "error");
-			admin_redirect('index.php?module=file'.$dir_query);
-		}
-	} elseif(isset($dir) && !empty($dir) && empty($file)) {
-		if($mybb->input['rdir']){
+            $page->output_footer();
+        } else {
+            flash_message($lang->file_error_exists, "error");
+            admin_redirect('index.php?module=file'.$dir_query);
+        }
+    } elseif(isset($dir) && !empty($dir) && empty($file)) {
+        if($mybb->input['rdir']){
             $rdir = htmlspecialchars_uni(str_replace(array("\\", "//"), "/", $mybb->input['rdir']));
             $rdir = ltrim($dir, '.');
             $rdir = ltrim($dir, '/');
@@ -687,143 +687,143 @@ elseif($mybb->input['action'] == "delete") {
                 $rdir_query = '&directory='.$rdir;
                 $rdir_query2 = '&rdir='.$rdir;
             }
-		} else {
-			$rdir = '';	
-		}
+        } else {
+            $rdir = '';    
+        }
         
-		if(file_exists(MYBB_ROOT.$dir) && !empty($dir)) {
-			if($dir != "/") {
-				if($mybb->request_method == "post") {	
-					if($mybb->input['delete'])	{
-						if(removedir(MYBB_ROOT.$dir)) {
-							flash_message($lang->file_success_delete_dir, "success");
-						} else {
-							flash_message($lang->file_error_delete, "error");
-						}
-					}
+        if(file_exists(MYBB_ROOT.$dir) && !empty($dir)) {
+            if($dir != "/") {
+                if($mybb->request_method == "post") {    
+                    if($mybb->input['delete'])    {
+                        if(removedir(MYBB_ROOT.$dir)) {
+                            flash_message($lang->file_success_delete_dir, "success");
+                        } else {
+                            flash_message($lang->file_error_delete, "error");
+                        }
+                    }
                     admin_redirect('index.php?module=file'.$rdir_query);
-				}
-				
-				$lang->file_nav_delete_dir = $lang->sprintf($lang->file_nav_delete_dir, $dir);
-				$page->add_breadcrumb_item($lang->file_nav_delete_dir, 'index.php?module=file&action=delete'.$dir_query);
-				$page->output_header();
+                }
+                
+                $lang->file_nav_delete_dir = $lang->sprintf($lang->file_nav_delete_dir, $dir);
+                $page->add_breadcrumb_item($lang->file_nav_delete_dir, 'index.php?module=file&action=delete'.$dir_query);
+                $page->output_header();
 
-				$form = new Form('index.php?module=file&action=delete'.$dir_query.$rdir_query2, "post", "delete_dir");
-				
-				$lang->file_delete_dir_title = $lang->sprintf($lang->file_delete_dir_title, $dir);
-				$form_container = new FormContainer($lang->file_delete_dir_title, 'tfixed');
+                $form = new Form('index.php?module=file&action=delete'.$dir_query.$rdir_query2, "post", "delete_dir");
+                
+                $lang->file_delete_dir_title = $lang->sprintf($lang->file_delete_dir_title, $dir);
+                $form_container = new FormContainer($lang->file_delete_dir_title, 'tfixed');
 
-				$form_container->output_row($lang->file_delete_dir_desc, $lang->file_delete_warn);
-				$form_container->end();
+                $form_container->output_row($lang->file_delete_dir_desc, $lang->file_delete_warn);
+                $form_container->end();
 
-				$buttons[] = $form->generate_submit_button($lang->file_button_delete, array('name' => 'delete'));
-				$buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
+                $buttons[] = $form->generate_submit_button($lang->file_button_delete, array('name' => 'delete'));
+                $buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
 
-				$form->output_submit_wrapper($buttons);
+                $form->output_submit_wrapper($buttons);
 
-				$form->end();
+                $form->end();
 
-				$page->output_footer();
-			} else {
-				flash_message($lang->file_error_delete_root, "error");
-				admin_redirect("index.php?module=file");
-			}
-		} else {
-			flash_message($lang->file_error_exists_dir, "error");
-			admin_redirect("index.php?module=file");
-		}
-	} else {
-		flash_message($lang->file_error_delete_input, "error");
-		admin_redirect("index.php?module=file");
-	}
+                $page->output_footer();
+            } else {
+                flash_message($lang->file_error_delete_root, "error");
+                admin_redirect("index.php?module=file");
+            }
+        } else {
+            flash_message($lang->file_error_exists_dir, "error");
+            admin_redirect("index.php?module=file");
+        }
+    } else {
+        flash_message($lang->file_error_delete_input, "error");
+        admin_redirect("index.php?module=file");
+    }
 }
 elseif($mybb->input['action'] == "new_folder"){
-	if($mybb->request_method == "post"){
-    	if($mybb->input['close']){
-			admin_redirect('index.php?module=file'.$dir_query);	
-		} elseif($mybb->input['create']) {
-			if(!empty($mybb->input['folder_name'])){
-				$nfolder = htmlspecialchars_uni($mybb->input['folder_name']);
-				if(!file_exists(MYBB_ROOT.$dir.$nfolder."/")){
-					if(mkdir(MYBB_ROOT.$dir."/".$nfolder, 0777)) {
-						flash_message($lang->file_success_newdir, "success");
+    if($mybb->request_method == "post"){
+        if($mybb->input['close']){
+            admin_redirect('index.php?module=file'.$dir_query);    
+        } elseif($mybb->input['create']) {
+            if(!empty($mybb->input['folder_name'])){
+                $nfolder = htmlspecialchars_uni($mybb->input['folder_name']);
+                if(!file_exists(MYBB_ROOT.$dir.$nfolder."/")){
+                    if(mkdir(MYBB_ROOT.$dir."/".$nfolder, 0777)) {
+                        flash_message($lang->file_success_newdir, "success");
                         $dir_query .= '/'.$nfolder;
-						admin_redirect('index.php?module=file'.$dir_query);
-					} else {
-						flash_message($lang->file_error_newdir, "error");
-						admin_redirect('index.php?module=file&action=new_dir'.$dir_query);
-					}
-				} else {
-					flash_message($lang->file_error_newdir_exists, "error");
-					admin_redirect('index.php?module=file&action=new_folder'.$dir_query);	
-				}
-			} else {
-				flash_message($lang->file_error_newdir_name, "error");
-				admin_redirect('index.php?module=file&action=new_folder'.$dir_query);
-			}
-		}
-	}
-	$page->add_breadcrumb_item($lang->file_nav_newdir, 'index.php?module=file'.$dir_query.'&action=new_folder');
-	
-	$page->output_header();
-	$page->output_nav_tabs($sub_tabs, 'new_folder');
-	
-	$form = new Form('index.php?module=file&action=new_folder'.$dir_query, "post", "new_folder");
+                        admin_redirect('index.php?module=file'.$dir_query);
+                    } else {
+                        flash_message($lang->file_error_newdir, "error");
+                        admin_redirect('index.php?module=file&action=new_dir'.$dir_query);
+                    }
+                } else {
+                    flash_message($lang->file_error_newdir_exists, "error");
+                    admin_redirect('index.php?module=file&action=new_folder'.$dir_query);    
+                }
+            } else {
+                flash_message($lang->file_error_newdir_name, "error");
+                admin_redirect('index.php?module=file&action=new_folder'.$dir_query);
+            }
+        }
+    }
+    $page->add_breadcrumb_item($lang->file_nav_newdir, 'index.php?module=file'.$dir_query.'&action=new_folder');
     
-	$lang->file_newdir_title = $lang->sprintf($lang->file_newdir_title, $dir);
-	$form_container = new FormContainer($lang->file_newdir_title, 'tfixed');
+    $page->output_header();
+    $page->output_nav_tabs($sub_tabs, 'new_folder');
+    
+    $form = new Form('index.php?module=file&action=new_folder'.$dir_query, "post", "new_folder");
+    
+    $lang->file_newdir_title = $lang->sprintf($lang->file_newdir_title, $dir);
+    $form_container = new FormContainer($lang->file_newdir_title, 'tfixed');
 
-	$form_container->output_row($lang->file_newdir_desc, $lang->file_newdir_subdesc, $form->generate_text_box('folder_name'));
-	$form_container->end();
+    $form_container->output_row($lang->file_newdir_desc, $lang->file_newdir_subdesc, $form->generate_text_box('folder_name'));
+    $form_container->end();
 
-	$buttons[] = $form->generate_submit_button($lang->file_button_newdir, array('name' => 'create'));
-	$buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
+    $buttons[] = $form->generate_submit_button($lang->file_button_newdir, array('name' => 'create'));
+    $buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
 
-	$form->output_submit_wrapper($buttons);
-	$form->end();
-	$page->output_footer();
+    $form->output_submit_wrapper($buttons);
+    $form->end();
+    $page->output_footer();
 }
 elseif($mybb->input['action'] == "new_file"){
-	if($mybb->request_method == "post"){
-    	if($mybb->input['close']){
-			admin_redirect('index.php?module=file'.$dir_query);	
-		} elseif($mybb->input['create']) {
-			if(!empty($mybb->input['file_name'])){
-				$nfile = htmlspecialchars_uni($mybb->input['file_name']);
-				if(!file_exists(MYBB_ROOT.$dir."/".$nfile)){
-					$newfile = fopen(MYBB_ROOT.$dir."/".$nfile, "w");
-					fclose($newfile);
-					flash_message($lang->file_success_newfile, "success");
-					admin_redirect('index.php?module=file&action=edit'.$dir_query.'&file='.$nfile);
-				} else {
-					flash_message($lang->file_error_newfile_name, "error");
-					admin_redirect('index.php?module=file&action=new_file'.$dir_query);	
-				}
-			} else {
-				flash_message($lang->file_error_newfile_name, "error");
-				admin_redirect('index.php?module=file&action=new_file'.$dir_query);
-			}
-		}
-	}
-	$page->add_breadcrumb_item($lang->file_nav_newfile, 'index.php?module=file'.$dir_query.'&action=new_file');
-	
-	$page->output_header();
-	$page->output_nav_tabs($sub_tabs, 'new_file');
-	
-	$form = new Form('index.php?module=file&action=new_file'.$dir_query, "post", "new_file");
+    if($mybb->request_method == "post"){
+        if($mybb->input['close']){
+            admin_redirect('index.php?module=file'.$dir_query);    
+        } elseif($mybb->input['create']) {
+            if(!empty($mybb->input['file_name'])){
+                $nfile = htmlspecialchars_uni($mybb->input['file_name']);
+                if(!file_exists(MYBB_ROOT.$dir."/".$nfile)){
+                    $newfile = fopen(MYBB_ROOT.$dir."/".$nfile, "w");
+                    fclose($newfile);
+                    flash_message($lang->file_success_newfile, "success");
+                    admin_redirect('index.php?module=file&action=edit'.$dir_query.'&file='.$nfile);
+                } else {
+                    flash_message($lang->file_error_newfile_name, "error");
+                    admin_redirect('index.php?module=file&action=new_file'.$dir_query);    
+                }
+            } else {
+                flash_message($lang->file_error_newfile_name, "error");
+                admin_redirect('index.php?module=file&action=new_file'.$dir_query);
+            }
+        }
+    }
+    $page->add_breadcrumb_item($lang->file_nav_newfile, 'index.php?module=file'.$dir_query.'&action=new_file');
     
-	$lang->file_newfile_title = $lang->sprintf($lang->file_newfile_title, $dir);
-	$form_container = new FormContainer($lang->file_newfile_title, 'tfixed');
+    $page->output_header();
+    $page->output_nav_tabs($sub_tabs, 'new_file');
+    
+    $form = new Form('index.php?module=file&action=new_file'.$dir_query, "post", "new_file");
+    
+    $lang->file_newfile_title = $lang->sprintf($lang->file_newfile_title, $dir);
+    $form_container = new FormContainer($lang->file_newfile_title, 'tfixed');
 
-	$form_container->output_row($lang->file_newfile_desc, $lang->file_newfile_subdesc, $form->generate_text_box('file_name'));
-	$form_container->end();
+    $form_container->output_row($lang->file_newfile_desc, $lang->file_newfile_subdesc, $form->generate_text_box('file_name'));
+    $form_container->end();
 
-	$buttons[] = $form->generate_submit_button($lang->file_button_newfile, array('name' => 'create'));
-	$buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
+    $buttons[] = $form->generate_submit_button($lang->file_button_newfile, array('name' => 'create'));
+    $buttons[] = $form->generate_submit_button($lang->file_button_close, array('name' => 'close'));
 
-	$form->output_submit_wrapper($buttons);
-	$form->end();
-	$page->output_footer();
+    $form->output_submit_wrapper($buttons);
+    $form->end();
+    $page->output_footer();
 }
 
 if(!$mybb->input['action']) {
@@ -865,19 +865,19 @@ $(document).ready(function() {
         }
     });
     
-	$(".file__actions__rename").click(function(event){
-		event.preventDefault();
-		var tr = $(this).parents(".file"),
+    $(".file__actions__rename").click(function(event){
+        event.preventDefault();
+        var tr = $(this).parents(".file"),
             name = tr.find(".file__name__tag").text();
-		tr.find(".file__name__form").remove();
-		tr.find(".file__name__tag").hide();
-		tr.find(".file__name").append(\'<form action="#" method="post" name="form_rename" class="file__name__form"><input type="text" name="new_name" value="\'+name+\'" class="file__name__form__input text_input"> <input type="button" name="rename"  value="'.$lang->file_button_rename.'" class="file__name__form__submit submit_button"> <input type="button" name="cancel" value="'.$lang->file_button_cancel.'" class="file__name__form__cancel submit_button"></form>\');
+        tr.find(".file__name__form").remove();
+        tr.find(".file__name__tag").hide();
+        tr.find(".file__name").append(\'<form action="#" method="post" name="form_rename" class="file__name__form"><input type="text" name="new_name" value="\'+name+\'" class="file__name__form__input text_input"> <input type="button" name="rename"  value="'.$lang->file_button_rename.'" class="file__name__form__submit submit_button"> <input type="button" name="cancel" value="'.$lang->file_button_cancel.'" class="file__name__form__cancel submit_button"></form>\');
         
         tr.find(".file__name__form__cancel").click(function() {
-			tr.find(".file__name__tag").show();
-			tr.find(".file__name__form").remove();
-		});
-		
+            tr.find(".file__name__tag").show();
+            tr.find(".file__name__form").remove();
+        });
+        
         tr.find(".file__name__form__input").keydown(function(e) {
             if(e.keyCode == 13) {
                 e.preventDefault();
@@ -886,11 +886,11 @@ $(document).ready(function() {
             }
         }).focus();
         
-		tr.find(".file__name__form__submit").click(function(e) {
+        tr.find(".file__name__form__submit").click(function(e) {
             e.preventDefault();
             rename(tr);
         });
-	});
+    });
     
     $("input.inline_action").click(function () {
         if ($("input.check_all").is(":checked")) {
@@ -966,12 +966,12 @@ function rename(tr) {
 }
 </script>
 ';
-	
+    
     $page->output_header();
-	$page->output_nav_tabs($sub_tabs, "file_manager");
+    $page->output_nav_tabs($sub_tabs, "file_manager");
     
     $form = new Form('index.php?module=file'.$dir_query, "POST");
-	echo $form->generate_text_box('search', $lang->file_search, array('class' => 'file__search'));
+    echo $form->generate_text_box('search', $lang->file_search, array('class' => 'file__search'));
     
     $table = new Table;
     
@@ -1006,58 +1006,58 @@ function rename(tr) {
     $open = new DirectoryIterator(MYBB_ROOT.$dir);
     
     $directory = $files = array();
-	foreach($open as $file){
+    foreach($open as $file){
         if(in_array($file->getfilename(), array(".", ".."))) continue;
         
         if($file->isDir()){
             $directory[] = array(
-				'name' => $file->getfilename(),
+                'name' => $file->getfilename(),
                 'path' => $file->getPathname()
-			);
+            );
         }
-		
+        
         if($file->isFile()){
-			$files[] = array(
-				'name' => $file->getfilename(),
-				'ext' => $file->getExtension(),
+            $files[] = array(
+                'name' => $file->getfilename(),
+                'ext' => $file->getExtension(),
                 'path' => $file->getPathname()
-			);
+            );
         }
     }
     asort($directory);
     asort($files);
     
-	foreach($directory as $d) {
+    foreach($directory as $d) {
         $editTime = my_date($mybb->settings['dateformat'].' '.$mybb->settings['timeformat'], filemtime($d['path']));
-		$table->construct_cell("<img src=\"extension/folder.png\">", array('class' => 'file__icon'));
-		$table->construct_cell("<a href=\"index.php?module=file&directory={$dir}/{$d['name']}\" class=\"file__name__tag\"><strong>".$d['name']."</strong></a>", array("width" => "60%", "class" => "file__name"));
+        $table->construct_cell("<img src=\"extension/folder.png\">", array('class' => 'file__icon'));
+        $table->construct_cell("<a href=\"index.php?module=file&directory={$dir}/{$d['name']}\" class=\"file__name__tag\"><strong>".$d['name']."</strong></a>", array("width" => "60%", "class" => "file__name"));
         $table->construct_cell($editTime, array("width" => "15%", "class" => "file__modified align_center"));
-		$table->construct_cell('<span><a href="#rename" class="file__actions__rename">'.$lang->file_rename.'</a></span> <span><a class="file__actions__delete" href="index.php?module=file&action=delete&directory='.$dir.'/'.$d['name'].$rdir_query.'">'.$lang->file_delete.'</a></span>', array("width" => "25%", "class" => "file__actions align_center"));
+        $table->construct_cell('<span><a href="#rename" class="file__actions__rename">'.$lang->file_rename.'</a></span> <span><a class="file__actions__delete" href="index.php?module=file&action=delete&directory='.$dir.'/'.$d['name'].$rdir_query.'">'.$lang->file_delete.'</a></span>', array("width" => "25%", "class" => "file__actions align_center"));
         $table->construct_cell('<input type="checkbox" class="checkbox inline_action" name="files[]" value="'.$d['name'].'" value="1" />');
-		$table->construct_row(array("class" => "file dir"));
-	}
-	
-	foreach($files as $f) {
+        $table->construct_row(array("class" => "file dir"));
+    }
+    
+    foreach($files as $f) {
         $editTime = my_date($mybb->settings['dateformat'].' '.$mybb->settings['timeformat'], filemtime($f['path']));
         $icon = get_file_icon($f['name']);
-		$table->construct_cell("<img src=\"{$icon}\">", array('class' => 'file__icon'));
-		$table->construct_cell("<strong class=\"file__name__tag\">{$f['name']}</strong>", array("width" => "60%", "class" => "file__name"));
+        $table->construct_cell("<img src=\"{$icon}\">", array('class' => 'file__icon'));
+        $table->construct_cell("<strong class=\"file__name__tag\">{$f['name']}</strong>", array("width" => "60%", "class" => "file__name"));
         $table->construct_cell($editTime, array("width" => "15%", "class" => "file__modified align_center"));
-		$action = '<span><a href="'.$mybb->settings['bburl'].'/'.$dir.'/'.$f['name'].'" target="_blank">'.$lang->file_view.'</a></span>';
-		if(is_editable($f['name']))
-			$action .= '<span><a href="index.php?module=file&action=edit'.$dir_query.'&file='.$f['name'].'" class="file__actions__edit">'.$lang->file_edit.'</a></span> ';
-		$action .= '<span><a href="#rename" class="file__actions__rename">'.$lang->file_rename.'</a></span> <span><a class="file__actions__delete" href="index.php?module=file&action=delete'.$dir_query.'&file='.$f['name'].'">'.$lang->file_delete.'</a></span>';
-		$table->construct_cell($action, array("width" => "25%", "class" => "file__actions align_center"));
+        $action = '<span><a href="'.$mybb->settings['bburl'].'/'.$dir.'/'.$f['name'].'" target="_blank">'.$lang->file_view.'</a></span>';
+        if(is_editable($f['name']))
+            $action .= '<span><a href="index.php?module=file&action=edit'.$dir_query.'&file='.$f['name'].'" class="file__actions__edit">'.$lang->file_edit.'</a></span> ';
+        $action .= '<span><a href="#rename" class="file__actions__rename">'.$lang->file_rename.'</a></span> <span><a class="file__actions__delete" href="index.php?module=file&action=delete'.$dir_query.'&file='.$f['name'].'">'.$lang->file_delete.'</a></span>';
+        $table->construct_cell($action, array("width" => "25%", "class" => "file__actions align_center"));
         $table->construct_cell('<input type="checkbox" class="checkbox inline_action" name="files[]" value="'.$f['name'].'" value="1" />');
-		$table->construct_row(array("class" => "file"));
-	}
-	
+        $table->construct_row(array("class" => "file"));
+    }
+    
     $table->output($lang->file_title);
     
     echo '
 <div style="text-align:right"><span class="smalltext"><strong>'.$lang->file_inline_actions.'</strong></span>
 <select name="action">
-	<option value="multidelete">'.$lang->file_delete.'</option>
+    <option value="multidelete">'.$lang->file_delete.'</option>
     <option value="multimove">'.$lang->file_move.'</option>
     <option value="multicopy">'.$lang->file_copy.'</option>
     <option value="zip">'.$lang->file_zip.'</option>
